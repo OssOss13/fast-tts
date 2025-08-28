@@ -33,9 +33,3 @@ Thumbs.db
 .cache/
 .local/
 
-# Audio files (don’t push generated TTS files)
-audio/
-
-# Static (if generated, not source)
-static/*.mp3
-static/*.wav
