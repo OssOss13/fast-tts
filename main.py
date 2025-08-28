@@ -16,13 +16,9 @@ import math
 from elevenlabs.client import ElevenLabs
 import requests
 from elevenlabs import play
-from contextlib import asynccontextmanager
 
 
 app = FastAPI(title="NOVEXA AGI TTS API", version="1.0.0")
-
-# Ensure audio directory exists
-# os.makedirs("audio", exist_ok=True)
 
 # Add CORS middleware
 app.add_middleware(
@@ -33,18 +29,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-BASE_DIR = Path(__file__).resolve().parent
-
-STATIC_DIR = BASE_DIR / "static"
-AUDIO_DIR = BASE_DIR / "audio"
-
-AUDIO_DIR.mkdir(exist_ok=True)
-
-# Mount static + audio
-app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-
+# Mount the static folder (frontend)
+app.mount("/audio", StaticFiles(directory="audio"), name="audio")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Create temp directory for audio files if it doesn't exist
 TEMP_AUDIO_DIR = Path("audio")
@@ -53,7 +40,7 @@ TEMP_AUDIO_DIR.mkdir(exist_ok=True)
 @app.get("/")
 def root():
     """Serve the main HTML page"""
-    return FileResponse(STATIC_DIR / "index.html")
+    return FileResponse("static/index.html")
 
 @app.post("/tts")
 async def generate_tts(
@@ -283,13 +270,16 @@ async def delete_audio(audio_id: str):
     else:
         raise HTTPException(status_code=404, detail="Audio file not found")
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # ---- startup tasks ----
+# Cleanup old audio files on startup
+@app.on_event("startup")
+async def cleanup_old_files():
+    """Clean up old audio files on server startup"""
     try:
         now = time.time()
         cutoff = now - 3600
+
         for file_path in TEMP_AUDIO_DIR.glob("*.wav"):
+            # Remove files older than 1 hour
             if file_path.stat().st_mtime < cutoff:
                 os.remove(file_path)
                 print(f"🗑️ Deleted old file: {file_path.name}")
@@ -297,15 +287,6 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"Error during cleanup: {e}")
 
-    yield  # 👈 allows the app to run
-
-    # ---- shutdown tasks (optional) ----
-    print("App shutting down...")
-
-# attach lifespan
-app = FastAPI(title="NOVEXA AGI TTS API", version="1.0.0", lifespan=lifespan)
-
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
