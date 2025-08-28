@@ -16,6 +16,7 @@ import math
 from elevenlabs.client import ElevenLabs
 import requests
 from elevenlabs import play
+from contextlib import asynccontextmanager
 
 
 app = FastAPI(title="NOVEXA AGI TTS API", version="1.0.0")
@@ -273,22 +274,27 @@ async def delete_audio(audio_id: str):
     else:
         raise HTTPException(status_code=404, detail="Audio file not found")
 
-# Cleanup old audio files on startup
-@app.on_event("startup")
-async def cleanup_old_files():
-    """Clean up old audio files on server startup"""
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # ---- startup tasks ----
     try:
         now = time.time()
         cutoff = now - 3600
-
         for file_path in TEMP_AUDIO_DIR.glob("*.wav"):
-            # Remove files older than 1 hour
             if file_path.stat().st_mtime < cutoff:
                 os.remove(file_path)
                 print(f"🗑️ Deleted old file: {file_path.name}")
         print(f"Cleaned up old audio files in {TEMP_AUDIO_DIR}")
     except Exception as e:
         print(f"Error during cleanup: {e}")
+
+    yield  # 👈 allows the app to run
+
+    # ---- shutdown tasks (optional) ----
+    print("App shutting down...")
+
+# attach lifespan
+app = FastAPI(title="NOVEXA AGI TTS API", version="1.0.0", lifespan=lifespan)
 
 if __name__ == "__main__":
     import uvicorn
