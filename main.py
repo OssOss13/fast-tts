@@ -29,13 +29,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount the static folder (frontend)
-app.mount("/audio", StaticFiles(directory="audio"), name="audio")
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
 # Create temp directory for audio files if it doesn't exist
 TEMP_AUDIO_DIR = Path("audio")
 TEMP_AUDIO_DIR.mkdir(exist_ok=True)
+
+# Mount the static folder (frontend)
+app.mount("/audio", StaticFiles(directory="audio"), name="audio")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 def root():
