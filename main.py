@@ -22,7 +22,7 @@ from contextlib import asynccontextmanager
 app = FastAPI(title="NOVEXA AGI TTS API", version="1.0.0")
 
 # Ensure audio directory exists
-os.makedirs("audio", exist_ok=True)
+# os.makedirs("audio", exist_ok=True)
 
 # Add CORS middleware
 app.add_middleware(
@@ -33,9 +33,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount the static folder (frontend)
-app.mount("/audio", StaticFiles(directory="audio"), name="audio")
-app.mount("/static", StaticFiles(directory="static"), name="static")
+
+BASE_DIR = Path(__file__).resolve().parent
+
+STATIC_DIR = BASE_DIR / "static"
+AUDIO_DIR = BASE_DIR / "audio"
+
+AUDIO_DIR.mkdir(exist_ok=True)
+
+# Mount static + audio
+app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 
 # Create temp directory for audio files if it doesn't exist
 TEMP_AUDIO_DIR = Path("audio")
@@ -44,7 +53,7 @@ TEMP_AUDIO_DIR.mkdir(exist_ok=True)
 @app.get("/")
 def root():
     """Serve the main HTML page"""
-    return FileResponse("static/index.html")
+    return FileResponse(STATIC_DIR / "index.html")
 
 @app.post("/tts")
 async def generate_tts(
