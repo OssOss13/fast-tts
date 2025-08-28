@@ -787,7 +787,7 @@
                 formData.append("provider", provider);
                 formData.append("api_key", settings.apiKey);
 
-                const response = await fetch("http://127.0.0.1:8000/test-connection", {
+                const response = await fetch("/test-connection", {
                     method: "POST",
                     body: formData
                 });
@@ -847,7 +847,7 @@
                 if (settings.model) formData.append("model", settings.model);
                 if (settings.language) formData.append("language", settings.language);
 
-                const response = await fetch("http://127.0.0.1:8000/tts", {
+                const response = await fetch("/tts", {
                     method: "POST",
                     body: formData
                 });
