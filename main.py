@@ -20,6 +20,9 @@ from elevenlabs import play
 
 app = FastAPI(title="NOVEXA AGI TTS API", version="1.0.0")
 
+# Ensure audio directory exists
+os.makedirs("audio", exist_ok=True)
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
