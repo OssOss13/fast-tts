@@ -4,15 +4,10 @@ from fastapi import FastAPI, Form, HTTPException
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-import tempfile
 import os
-import json
 from pathlib import Path
 from typing import Optional
 import uuid
-import wave
-import struct
-import math
 from elevenlabs.client import ElevenLabs
 import requests
 from elevenlabs import play
