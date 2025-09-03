@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novexa AGI Template</title>
+
+    <!-- 1. استدعاء الخطوط (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- ============================================== -->
+    <!-- ==      بداية كود الـ CSS المدمج             == -->
+    <!-- ============================================== -->
+    <style>
+        /* --- 1. الإعدادات الأساسية والألوان --- */
+        :root {
+            --bg-color: #05080f;
+            --primary-blue: #8cb0ff;
+            --light-blue: #a3c3ff;
+            --container-bg: rgba(12, 15, 26, 0.82);
+            --border-color: rgba(77, 138, 255, 0.25);
+            --text-color: #e1e1e1;
+            --heading-color: #ffffff;
+            --shadow-color: rgba(77, 138, 255, 0.2);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            transition: transform 0.5s ease-out;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            color: var(--heading-color);
+        }
+
+        /* --- 2. المشهد الفضائي المتحرك --- */
+        .space-scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        #twinkling-stars-container { width: 100%; height: 100%; position: absolute; }
+        .star { position: absolute; background-color: white; border-radius: 50%; animation-name: twinkle; animation-iteration-count: infinite; }
+        @keyframes twinkle {
+            0%   { opacity: 0; transform: scale(0.5); }
+            50%  { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        #rotatingGalaxy {
+            position: fixed; top: 10px; right: 10px; width: 400px; height: auto; opacity: 0.35;
+            transform: rotate(15deg);
+        }
+
+        #roamingRobot {
+            position: fixed; width: 130px; height: auto; opacity: 0.8; z-index: -1;
+            animation: roam-fullscreen 90s ease-in-out infinite;
+        }
+        @keyframes roam-fullscreen {
+            0%   { bottom: 5%; left: 5%; transform: rotate(-15deg); }
+            25%  { bottom: 50%; left: 75%; transform: rotate(20deg); }
+            50%  { bottom: 60%; left: 10%; transform: rotate(-20deg); }
+            75%  { bottom: 10%; left: 80%; transform: rotate(15deg); }
+            100% { bottom: 5%; left: 5%; transform: rotate(-15deg); }
+        }
+
+        /* --- 3. تصميم المحتوى (يجب أن يكون المحتوى داخل .container) --- */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+
+        /* --- 4. أنماط إضافية (ألوان الخطوط، الأزرار، إلخ) --- */
+        h1, h2, h3 { color: var(--heading-color); }
+        p { color: var(--text-color); }
+        a { color: var(--primary-blue); }
+
+        .form-container {
+            background: var(--container-bg); padding: 35px; border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+    </style>
+
+    <style>
+        /* === BASE STYLES & RESETS === */
+        :root {
+            --primary-gradient: linear-gradient(90deg, #3B82F6, #A855F7);
+            --background-dark: #0A0E1A;
+            --glass-bg: rgba(26, 30, 48, 0.6);
+            --glass-border: rgba(100, 116, 139, 0.3);
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --accent-blue: #3B82F6;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --accent-orange: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* === DASHBOARD LAYOUT === */
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(10, 14, 26, 0.8);
+            padding: 30px;
+            border-left: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            transition: transform 0.3s ease-in-out;
+            z-index: 1050;
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+        .sidebar-logo .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+        }
+        .sidebar-logo .logo-text span {
+            font-weight: 400;
+            opacity: 0.8;
+        }
+        .sidebar-logo .logo-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        .sidebar nav li {
+            position: relative;
+            padding: 15px 25px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            text-align: right;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .sidebar nav li:hover {
+            background: var(--glass-bg);
+            border-color: var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        .sidebar nav a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sidebar nav .active {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+        }
+
+        .sidebar nav .active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: var(--primary-gradient);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .language-switcher {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .language-switcher button {
+            background: none;
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 8px 10px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease-in-out;
+        }
+        .language-switcher button:hover {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+        }
+        .language-switcher .active {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            height: 100vh;
+            /* overflow-y: auto; */
+            display: flex;
+            justify-content: center;
+            padding: 50px 30px;
+        }
+
+        header h2 {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            margin-bottom: 40px;
+        }
+        
+        /* === Glassmorphism Card Style === */
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .card-header h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* === Button Styles === */
+        .btn {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+        }
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--glass-border);
+        }
+        .btn-secondary:hover {
+            background: rgba(100, 116, 139, 0.2);
+            color: var(--text-primary);
+        }
+        .btn-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .btn-success:hover {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        /* === Form Styles === */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            background: rgba(10, 14, 26, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s ease-in-out;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* === Text Generation Interface === */
+        .tts-interface {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .text-input-section {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .text-input-container {
+            flex: 1;
+        }
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* === Settings Modal === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .modal-header h3 {
+            color: var(--text-primary);
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.2s ease-in-out;
+        }
+        .close-btn:hover {
+            color: var(--text-primary);
+            background: var(--glass-bg);
+        }
+
+        /* === Status Indicators === */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-connected {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+        }
+        .status-disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+        .status-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-orange);
+        }
+
+        /* === Audio Player === */
+        .audio-player {
+            background: rgba(10, 14, 26, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        .audio-player.show {
+            display: block;
+        }
+        .audio-player audio {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .audio-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .audio-info {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        /* Provider-specific settings */
+        .provider-settings {
+            display: none;
+        }
+        .provider-settings.show {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed; top: 0; right: 0; transform: translateX(100%);
+            }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { padding: 20px 15px; justify-content: flex-start; }
+            .text-input-section { flex-direction: column; align-items: stretch; }
+            .control-buttons { justify-content: stretch; }
+        }
+    </style>
+    <!-- ============================================== -->
+    <!-- ==        نهاية كود الـ CSS المدمج           == -->
+    <!-- ============================================== -->
+
+</head>
+<body>
+
+    <!-- ============================================== -->
+    <!-- ==      بداية عناصر المشهد الفضائي          == -->
+    <!-- ============================================== -->
+    <div class="space-scene">
+        <div id="twinkling-stars-container"></div>
+        <!-- تأكد من وجود فولدر img بجانب هذا الملف -->
+        <img src="/static/img/galaxy.png" alt="Galaxy" id="rotatingGalaxy">
+        <img src="/static/img/robot.png" alt="Robot" id="roamingRobot">
+    </div>
+    <!-- ============================================== -->
+    <!-- ==        نهاية عناصر المشهد الفضائي         == -->
+    <!-- ============================================== -->
+
+
+    <!-- ############################################## -->
+    <!-- ## 🚨 ضع محتوى صفحتك هنا داخل هذا الـ div 🚨   ## -->
+    <!-- ############################################## -->
+    
+    <div class="container">
+        <div class="hero-header" style="text-align: center;">
+        <img src="/static/img/novexa-logo.png" alt="NOVEXA Logo" style="width: 120px; height: auto; margin-bottom: 15px;">
+        <h1 style="font-size: 36px; font-weight: 700; color: white;">المستمع الإفتراضي</h1>
+        <p style="color: #94A3B8; font-size: 16px;">Powered by Novexa AGI</p>
+    </div>
+        <div class="dashboard-container">
+        <!-- <aside class="sidebar">
+            <div class="sidebar-logo">
+                <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3B82F6;" />
+                            <stop offset="100%" style="stop-color:#A855F7;" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M50,0 C22.4,0 0,22.4 0,50 C0,77.6 22.4,100 50,100 C77.6,100 100,77.6 100,50 C100,22.4 77.6,0 50,0 Z M50,90 C27.9,90 10,72.1 10,50 C10,27.9 27.9,10 50,10 C72.1,10 90,27.9 90,50 C90,72.1 72.1,90 50,90 Z M65,30 C62.2,30 60,32.2 60,35 C60,37.8 62.2,40 65,40 C67.8,40 70,37.8 70,35 C70,32.2 67.8,30 65,30 Z M65,60 C62.2,60 60,62.2 60,65 C60,67.8 62.2,70 65,70 C67.8,70 70,67.8 70,65 C70,62.2 67.8,60 65,60 Z M80,45 C77.2,45 75,47.2 75,50 C75,52.8 77.2,55 80,55 C82.8,55 85,52.8 85,50 C85,47.2 82.8,45 80,45 Z M35,30 C32.2,30 30,32.2 30,35 C30,37.8 32.2,40 35,40 C37.8,40 40,37.8 40,35 C40,32.2 37.8,30 35,30 Z M35,60 C32.2,60 30,62.2 30,65 C30,67.8 32.2,70 35,70 C37.8,70 40,67.8 40,65 C40,62.2 37.8,60 35,60 Z"/>
+                </svg>
+                <div class="logo-text">NOVEXA <span>AGI</span></div>
+            </div>
+            <nav>
+                <ul id="main-nav">
+                    <li><a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                        Bots System</a></li>
+                    <li><a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2h0z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                        Virtual Journalist</a></li>
+                    <li class="active"><a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="m19 10-2 2-2-2"></path><path d="m5 10 2 2 2-2"></path><path d="M8 21l8-4-8-4"></path></svg>
+                        Text to Speech</a></li>
+                </ul>
+            </nav>
+            <div class="language-switcher">
+                <button>English</button>
+                <button class="active">عربي</button>
+            </div>
+        </aside>
+         -->
+        <main class="main-content">
+            <div class="container">
+                <header>
+                    <h2>🔊 Text to Speech Generator</h2>
+                    <p>Convert your text into high-quality speech using AI-powered voices.</p>
+                </header>
+                
+                <!-- TTS Interface -->
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h3>Speech Generation</h3>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <span class="status-indicator status-connected" id="connection-status">
+                                <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+                                    <circle cx="4" cy="4" r="4"/>
+                                </svg>
+                                Connected
+                            </span>
+                            <button class="btn btn-secondary" id="settings-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09c0-.7-.4-1.34-1-1.51a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06c.46-.46.6-1.15.33-1.82a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09c.7 0 1.34-.4 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.46.46 1.15.6 1.82.33.61-.25 1-0.81 1-1.51V3a2 2 0 0 1 4 0v.09c0 .7.4 1.34 1 1.51.67.27 1.36.13 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.46.46-.6 1.15-.33 1.82.17.61.81 1 1.51 1H21a2 2 0 0 1 0 4h-.09c-.7 0-1.34.4-1.51 1z"/>
+                                </svg>  
+                                Settings
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tts-interface">
+                        <div class="text-input-section">
+                            <div class="text-input-container">
+                                <div class="form-group">
+                                    <label for="text-input">Text to Convert</label>
+                                    <textarea id="text-input" placeholder="Enter the text you want to convert to speech..."></textarea>
+                                </div>
+                            </div>
+                            <div class="control-buttons">
+                                <button class="btn btn-primary" id="generate-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Audio Player -->
+                        <div class="audio-player" id="audio-player">
+                            <audio controls id="audio-element">
+                                Your browser does not support the audio element.
+                            </audio>
+                            <div class="audio-controls">
+                                <div class="audio-info">
+                                    <span id="audio-duration">Duration: --:--</span> • 
+                                    <span id="audio-provider">Provider: --</span>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" id="download-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7,10 12,15 17,10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>TTS Settings</h3>
+                <button class="close-btn" id="close-modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+
+            <form id="settings-form">
+                <div class="form-group">
+                    <label for="provider-select">TTS Provider</label>
+                    <select id="provider-select">
+                        <option value="elevenlabs">ElevenLabs</option>
+                        <option value="google">Google TTS</option>
+                        <!-- <option value="openai">OpenAI TTS</option> -->
+                    </select>
+                </div>
+
+                <!-- ElevenLabs Settings -->
+                <div class="provider-settings show" id="elevenlabs-settings">
+                    <div class="form-group">
+                        <label for="elevenlabs-api-key">API Key</label>
+                        <input type="password" id="elevenlabs-api-key" placeholder="Enter your ElevenLabs API key">
+                    </div>
+                    <div class="form-group">
+                        <label for="elevenlabs-voice">Voice</label>
+                        <select id="elevenlabs-voice">
+                            <option value="21m00Tcm4TlvDq8ikWAM">Rachel</option>
+                            <option value="AZnzlk1XvdvUeBnXmlld">Domi</option>
+                            <option value="EXAVITQu4vr4xnSDxMaL">Bella</option>
+                            <option value="ErXwobaYiN019PkySvjV">Antoni</option>
+                            <option value="MF3mGyEYCl7XYWbV9V6O">Elli</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="elevenlabs-model">Model</label>
+                        <select id="elevenlabs-model">
+                            <option value="eleven_monolingual_v1">Eleven Monolingual v1</option>
+                            <option value="eleven_multilingual_v1">Eleven Multilingual v1</option>
+                            <option value="eleven_multilingual_v2">Eleven Multilingual v2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Google TTS Settings -->
+                <div class="provider-settings" id="google-settings">
+                    <div class="form-group">
+                        <label for="google-api-key">API Key</label>
+                        <input type="password" id="google-api-key" placeholder="Enter your Google Cloud API key">
+                    </div>
+                    <div class="form-group">
+                        <label for="google-language">Language</label>
+                        <select id="google-language">
+                            <option value="en-US">English (US)</option>
+                            <option value="en-GB">English (UK)</option>
+                            <option value="ar">Arabic</option>
+                            <option value="es-ES">Spanish</option>
+                            <option value="fr-FR">French</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="google-voice">Voice Name</label>
+                        <select id="google-voice">
+                            <option value="en-US-Wavenet-D">en-US-Wavenet-D</option>
+                            <option value="en-US-Wavenet-A">en-US-Wavenet-A</option>
+                            <option value="en-US-Standard-B">en-US-Standard-B</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- OpenAI TTS Settings -->
+                <!-- <div class="provider-settings" id="openai-settings">
+                    <div class="form-group">
+                        <label for="openai-api-key">API Key</label>
+                        <input type="password" id="openai-api-key" placeholder="Enter your OpenAI API key">
+                    </div>
+                    <div class="form-group">
+                        <label for="openai-voice">Voice</label>
+                        <select id="openai-voice">
+                            <option value="alloy">Alloy</option>
+                            <option value="echo">Echo</option>
+                            <option value="fable">Fable</option>
+                            <option value="onyx">Onyx</option>
+                            <option value="nova">Nova</option>
+                            <option value="shimmer">Shimmer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="openai-model">Model</label>
+                        <select id="openai-model">
+                            <option value="tts-1">TTS-1</option>
+                            <option value="tts-1-hd">TTS-1 HD</option>
+                        </select>
+                    </div>
+                </div> -->
+
+                <div style="display: flex; gap: 10px; margin-top: 30px;">
+                    <button type="button" class="btn btn-success" id="save-settings">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"></polyline></svg>
+                        Save Settings
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="test-connection">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>
+                        Test Connection
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <!-- ############################################## -->
+    <!-- ##        نهاية منطقة محتوى الصفحة          ## -->
+    <!-- ############################################## -->
+
+
+    <!-- ============================================== -->
+    <!-- ==      بداية كود الـ JS المدمج              == -->
+    <!-- ============================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    
+            // 1. توليد النجوم المتلألئة
+            const starContainer = document.getElementById('twinkling-stars-container');
+            if (starContainer) {
+                const numStars = 250;
+                for (let i = 0; i < numStars; i++) {
+                    let star = document.createElement('div');
+                    star.className = 'star';
+                    let size = Math.random() * 2.5 + 1;
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.animationDuration = `${Math.random() * 5 + 3}s`;
+                    star.style.animationDelay = `${Math.random() * 5}s`;
+                    starContainer.appendChild(star);
+                }
+            }
+
+            // 2. تأثير العمق التفاعلي (Parallax)
+            const scene = document.querySelector('.space-scene');
+            if (scene) {
+                document.body.addEventListener('mousemove', (e) => {
+                    const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                    const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                    scene.style.transform = `translateX(${xAxis}px) translateY(${yAxis}px)`;
+                });
+            }
+
+        });
+    </script>
+    <script>
+        // TTS Application State
+        const ttsApp = {
+            currentProvider: 'elevenlabs',
+            settings: {
+                elevenlabs: {
+                    apiKey: '',
+                    voice: '21m00Tcm4TlvDq8ikWAM',
+                    model: 'eleven_monolingual_v1',
+                    isConnected: null
+                },
+                google: {
+                    apiKey: '',
+                    language: 'en-US',
+                    voice: 'en-US-Wavenet-D',
+                    isConnected: null
+                },
+                // openai: {
+                //     apiKey: '',
+                //     voice: 'alloy',
+                //     model: 'tts-1',
+                //     isConnected: null
+                // }
+            },
+            isConnected: false
+        };
+
+        let lastGeneratedAudio = null;
+
+        // DOM Elements
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsModal = document.getElementById('settings-modal');
+        const closeModal = document.getElementById('close-modal');
+        const providerSelect = document.getElementById('provider-select');
+        const generateBtn = document.getElementById('generate-btn');
+        const textInput = document.getElementById('text-input');
+        const audioPlayer = document.getElementById('audio-player');
+        const audioElement = document.getElementById('audio-element');
+        const connectionStatus = document.getElementById('connection-status');
+        const saveSettingsBtn = document.getElementById('save-settings');
+        const testConnectionBtn = document.getElementById('test-connection');
+        const downloadBtn = document.getElementById('download-btn');
+        const audioDuration = document.getElementById('audio-duration');
+        const audioProvider = document.getElementById('audio-provider');
+
+        // Modal Controls
+        settingsBtn.addEventListener('click', () => {
+            settingsModal.classList.add('show');
+            loadSettingsToForm();
+        });
+
+        closeModal.addEventListener('click', () => {
+            settingsModal.classList.remove('show');
+        });
+
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.remove('show');
+            }
+        });
+
+        // Provider Selection
+        providerSelect.addEventListener('change', (e) => {
+            ttsApp.currentProvider = e.target.value;
+            showProviderSettings(e.target.value);
+        });
+
+        // Show/Hide Provider Settings
+        function showProviderSettings(provider) {
+            document.querySelectorAll('.provider-settings').forEach(el => {
+                el.classList.remove('show');
+            });
+            document.getElementById(`${provider}-settings`).classList.add('show');
+        }
+
+        // Load Settings to Form
+        function loadSettingsToForm() {
+            providerSelect.value = ttsApp.currentProvider;
+            showProviderSettings(ttsApp.currentProvider);
+            
+            // Load ElevenLabs settings
+            document.getElementById('elevenlabs-api-key').value = ttsApp.settings.elevenlabs.apiKey;
+            document.getElementById('elevenlabs-voice').value = ttsApp.settings.elevenlabs.voice;
+            document.getElementById('elevenlabs-model').value = ttsApp.settings.elevenlabs.model;
+            
+            // Load Google settings
+            document.getElementById('google-api-key').value = ttsApp.settings.google.apiKey;
+            document.getElementById('google-language').value = ttsApp.settings.google.language;
+            document.getElementById('google-voice').value = ttsApp.settings.google.voice;
+            
+            // Load OpenAI settings
+            // document.getElementById('openai-api-key').value = ttsApp.settings.openai.apiKey;
+            // document.getElementById('openai-voice').value = ttsApp.settings.openai.voice;
+            // document.getElementById('openai-model').value = ttsApp.settings.openai.model;
+        }
+
+        // Save Settings
+        saveSettingsBtn.addEventListener('click', () => {
+            // Save ElevenLabs settings
+            ttsApp.settings.elevenlabs.apiKey = document.getElementById('elevenlabs-api-key').value;
+            ttsApp.settings.elevenlabs.voice = document.getElementById('elevenlabs-voice').value;
+            ttsApp.settings.elevenlabs.model = document.getElementById('elevenlabs-model').value;
+            
+            // Save Google settings
+            ttsApp.settings.google.apiKey = document.getElementById('google-api-key').value;
+            ttsApp.settings.google.language = document.getElementById('google-language').value;
+            ttsApp.settings.google.voice = document.getElementById('google-voice').value;
+            
+            // Save OpenAI settings
+            // ttsApp.settings.openai.apiKey = document.getElementById('openai-api-key').value;
+            // ttsApp.settings.openai.voice = document.getElementById('openai-voice').value;
+            // ttsApp.settings.openai.model = document.getElementById('openai-model').value;
+            
+            // Show success message
+            showNotification('Settings saved successfully!', 'success');
+            settingsModal.classList.remove('show');
+            
+            // Update connection status
+            updateConnectionStatus();
+        });
+
+        // Test Connection
+        testConnectionBtn.addEventListener('click', async () => {
+            const provider = ttsApp.currentProvider;
+            const settings = ttsApp.settings[provider];
+
+            if(document.getElementById('elevenlabs-api-key').value != null){
+                ttsApp.settings.elevenlabs.apiKey = document.getElementById('elevenlabs-api-key').value;
+            }
+            if(document.getElementById('google-api-key').value != null){
+                ttsApp.settings.google.apiKey = document.getElementById('google-api-key').value;
+            }
+            // if(document.getElementById('openai-api-key').value != null){
+            //     ttsApp.settings.openai.apiKey = document.getElementById('openai-api-key').value;
+            // }
+
+            // Make sure API key is saved
+            if (!settings.apiKey) {
+                showNotification('Please enter an API key first.', 'error');
+                return;
+            }
+
+            // Show loading
+            testConnectionBtn.disabled = true;
+            testConnectionBtn.innerHTML = `<span class="animate-spin">⏳</span> Testing...`;
+
+            try {
+                const formData = new FormData();
+                formData.append("provider", provider);
+                formData.append("api_key", settings.apiKey);
+
+                const response = await fetch("/test-connection", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+                console.log("Connection test result:", result);
+
+                if (response.ok && result.success) {
+                    settings.isConnected = true;
+                    showNotification(`${provider.toUpperCase()} connection successful!`, 'success');
+                } else {
+                    settings.isConnected = false;
+                    showNotification(`${provider.toUpperCase()} connection failed.`, 'error');
+                }
+
+            } catch (error) {
+                console.error("Connection test failed:", error);
+                settings.isConnected = false;
+                showNotification('Connection test failed. Please try again.', 'error');
+            } finally {
+                testConnectionBtn.disabled = false;
+                testConnectionBtn.innerHTML = `Test Connection`;
+                updateConnectionStatus();
+            }
+        });
+
+
+        // Generate Speech
+        generateBtn.addEventListener('click', async () => {
+            const text = textInput.value.trim();
+            const provider = ttsApp.currentProvider;
+            const settings = ttsApp.settings[provider];
+
+            if (!text) {
+                showNotification('Please enter some text to convert.', 'error');
+                return;
+            }
+            
+            if (!ttsApp.settings[ttsApp.currentProvider].apiKey) {
+                showNotification('Please configure your TTS provider in settings.', 'error');
+                settingsModal.classList.add('show');
+                return;
+            }
+            
+            // Show loading state
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = `<span class="animate-spin">⏳</span> Generating...`;
+
+            
+            try {
+                const formData = new FormData();
+                formData.append("provider", provider);
+                formData.append("api_key", settings.apiKey);
+                formData.append("text", text);
+                
+                if (settings.voice) formData.append("voice", settings.voice);
+                if (settings.model) formData.append("model", settings.model);
+                if (settings.language) formData.append("language", settings.language);
+
+                const response = await fetch("/tts", {
+                    method: "POST",
+                    body: formData
+                });
+                console.log(response);
+                console.log(formData);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Backend error: ${errorText}`);
+                }
+
+                const result = await response.json();
+                console.log("Backend response:", result);
+
+                lastGeneratedAudio = result;
+
+                // Use returned audio URL
+                audioElement.src = result.audio_url;  
+                audioPlayer.classList.add("show");
+                audioProvider.textContent = `Provider: ${result.provider}`;
+                audioDuration.textContent = `Length: ${result.text_length} chars`;
+                audioElement.load();
+                
+                showNotification('Speech generated successfully!', 'success');
+                
+            } catch (error) {
+                showNotification('Failed to generate speech. Please try again.', 'error');
+            } finally {
+                // Restore button
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5,3 19,12 5,21"></polygon>
+                    </svg>
+                    Generate
+                `;
+            }
+        });
+
+        // Simulate Generation Process
+        async function simulateGeneration() {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                }, 3000); // Simulate 3-second generation time
+            });
+        }
+    
+        // Download Audio
+        downloadBtn.addEventListener('click', () => {
+            if (!lastGeneratedAudio) {
+                showNotification('No audio available to download!', 'error');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.href = audioElement.src;
+            link.download = lastGeneratedAudio.filename;  // use saved result
+            document.body.appendChild(link);  // required in some browsers
+            link.click();
+            document.body.removeChild(link);
+
+            showNotification('Download started!', 'success');
+        });
+
+        // Update Connection Status
+        function updateConnectionStatus() {
+            const provider = ttsApp.currentProvider;
+            const settings = ttsApp.settings[provider];
+            const hasApiKey = settings.apiKey;
+
+            if (hasApiKey && settings.isConnected === true) {
+                connectionStatus.className = 'status-indicator status-connected';
+                connectionStatus.innerHTML = `<svg width="8" height="8" viewBox="0 0 8 8" fill="green"><circle cx="4" cy="4" r="4"/></svg> Connected`;
+            } else if (hasApiKey && settings.isConnected === false) {
+                connectionStatus.className = 'status-indicator status-disconnected';
+                connectionStatus.innerHTML = `<svg width="8" height="8" viewBox="0 0 8 8" fill="red"><circle cx="4" cy="4" r="4"/></svg> Failed`;
+            } else if (hasApiKey) {
+                connectionStatus.className = 'status-indicator status-warning';
+                connectionStatus.innerHTML = `<svg width="8" height="8" viewBox="0 0 8 8" fill="orange"><circle cx="4" cy="4" r="4"/></svg> Not Tested`;
+            } else {
+                connectionStatus.className = 'status-indicator status-disconnected';
+                connectionStatus.innerHTML = `<svg width="8" height="8" viewBox="0 0 8 8" fill="gray"><circle cx="4" cy="4" r="4"/></svg> Not Configured`;
+            }
+        }
+
+
+
+        // Notification System
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--accent-green)' : 
+                           type === 'error' ? 'var(--accent-red)' : 
+                           type === 'info' ? 'var(--accent-blue)' : 'var(--accent-orange)'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                font-weight: 500;
+                z-index: 3000;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease-in-out;
+                max-width: 300px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Add spin animation for loading
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            .animate-spin {
+                animation: spin 1s linear infinite;
+            }
+            .btn-sm {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize app
+        updateConnectionStatus();
+        
+        // Handle keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    generateBtn.click();
+                } else if (e.key === ',') {
+                    e.preventDefault();
+                    settingsBtn.click();
+                }
+            }
+            
+            if (e.key === 'Escape') {
+                settingsModal.classList.remove('show');
+            }
+        });
+    </script>
+    <!-- ============================================== -->
+    <!-- ==        نهاية كود الـ JS المدمج           == -->
+    <!-- ============================================== -->
+</body>
+</html>

@@ -40,7 +40,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("/")
 def root():
     """Serve the main HTML page"""
-    return FileResponse("static/index.html")
+    return FileResponse("static/novexa_template.html")
 
 @app.post("/tts")
 async def generate_tts(
